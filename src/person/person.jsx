@@ -2,7 +2,7 @@ import React from "react";
 import './person.css'
 const person = props => {
   return (
-    <div className='Person'>
+    <div  className='Person'>
     <p onClick={props.click}>
       I'm {props.name} I am {props.age} years old
     </p>
@@ -10,6 +10,6 @@ const person = props => {
     <input type="text" onChange={props.changed} value={props.name}/>
     </div>
   );
-};
+}; 
 
 export default person;
