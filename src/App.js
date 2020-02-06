@@ -1,7 +1,7 @@
 import React from "react";
 import logo from "./logo.svg";
-import "./App.css";
-
+import styledm from "./App.module.css";
+import StyleTest from "./test.module.css";
 import Person from "./person/person.jsx";
 
 class App extends React.Component {
@@ -54,7 +54,8 @@ class App extends React.Component {
 
   render() {
     const style = {
-      backgroundColor: "white",
+      backgroundColor: "green",
+
       font: "inherit",
       border: "1px solid blue",
       padding: "8px",
@@ -79,9 +80,20 @@ class App extends React.Component {
         </div>
       );
     }
+    style.backgroundColor = "red";
+    const assignedClasses = [];
+    if (this.state.persons.length <= 2) {
+      assignedClasses.push(styledm.red);
+    }
+
+    if (this.state.persons.length <= 1) {
+      assignedClasses.push(styledm.bold);
+    }
+    console.log(StyleTest.main);
     return (
-      <div className="App">
-        <button style={style} onClick={this.togglePersonHandler}>
+      <div className={styledm.App}>
+        <p className={assignedClasses.join(" ")}>Helloooooo</p>
+        <button className={styledm.button} onClick={this.togglePersonHandler}>
           Toggle Persons
         </button>
         {person}
@@ -89,5 +101,4 @@ class App extends React.Component {
     );
   }
 }
-
 export default App;
