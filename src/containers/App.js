@@ -1,8 +1,8 @@
 import React from "react";
 import logo from "./logo.svg";
-import styledm from "./App.module.css";
-import StyleTest from "./test.module.css";
-import Person from "./person/person.jsx";
+import main from "./App.module.css";
+
+import Person from "../components/person/person.jsx";
 
 class App extends React.Component {
   state = {
@@ -63,6 +63,7 @@ class App extends React.Component {
     };
 
     let person = null;
+    let btnClass = [main.Button];
     if (this.state.showPersons) {
       person = (
         <div>
@@ -79,21 +80,22 @@ class App extends React.Component {
           })}
         </div>
       );
+      btnClass = main.Red;
     }
-    style.backgroundColor = "red";
+
     const assignedClasses = [];
     if (this.state.persons.length <= 2) {
-      assignedClasses.push(styledm.red);
+      assignedClasses.push(main.red);
     }
 
     if (this.state.persons.length <= 1) {
-      assignedClasses.push(styledm.bold);
+      assignedClasses.push(main.bold);
     }
-    console.log(StyleTest.main);
+
     return (
-      <div className={styledm.App}>
-        <p className={assignedClasses.join(" ")}>Helloooooo</p>
-        <button className={styledm.button} onClick={this.togglePersonHandler}>
+      <div className={main.App}>
+        <p className={assignedClasses}>Helloooooo</p>
+        <button className={btnClass} onClick={this.togglePersonHandler}>
           Toggle Persons
         </button>
         {person}
