@@ -1,18 +1,43 @@
 import React from "react";
-import logo from "./logo.svg";
+import Cockpit from "../components/cockpit/cockpit.jsx";
 import main from "./App.module.css";
-
-import Person from "../components/person/person.jsx";
+import Persons from "../components/persons/persons.jsx";
+//import Person from "./components/persons/person/person.jsx";
+import AuthContext from "../context/auth-context";
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    console.log("[App.js] constructor");
+  }
   state = {
     persons: [
       { id: "dasfgsad", name: "max", age: 29 },
       { id: "asdfss", name: "Same", age: 79 },
       { id: "gyvcsx", name: "Lou", age: 39 }
-    ]
+    ],
+    showCockPit: true,
+    changeCounter: 0,
+    authen: false
   };
 
+  static getDerivedStateFromProps(props, state) {
+    console.log("[App.js", "getDerivedStateFromProps", props);
+    return state;
+  }
+
+  componentDidMount() {
+    console.log("[App.js] componentDidMount");
+  }
+
+  componentDidUpdate() {
+    console.log("[App.js] componentDidUpdate");
+  }
+
+  // shouldComponentUpdate() {
+  //   console.log("[App.js] shouldComponentUpdate");
+  //   return true;
+  // }
   deletePersonHandler = personIndex => {
     //const persons = this.state.persons.slice();
     let persons = [...this.state.persons];
@@ -35,7 +60,8 @@ class App extends React.Component {
     persons[personIndex] = person;
 
     this.setState({
-      persons: persons
+      persons: persons,
+      changeCounter: this.state.changeCounter + 1
     });
 
     // this.setState({
@@ -52,53 +78,52 @@ class App extends React.Component {
     this.setState({ showPersons: !doesShow });
   };
 
-  render() {
-    const style = {
-      backgroundColor: "green",
+  loginHandler = () => {
+    this.setState({ authen: true });
+    console.log("hello");
+  };
 
-      font: "inherit",
-      border: "1px solid blue",
-      padding: "8px",
-      cursor: "pointer"
-    };
+  render() {
+    console.log("[App.js] render");
 
     let person = null;
-    let btnClass = [main.Button];
+
     if (this.state.showPersons) {
       person = (
-        <div>
-          {this.state.persons.map((peep, index) => {
-            return (
-              <Person
-                key={peep.id}
-                click={() => this.deletePersonHandler(index)}
-                name={peep.name}
-                age={peep.age}
-                changed={event => this.nameChangedHandler(event, peep.id)}
-              ></Person>
-            );
-          })}
-        </div>
+        <Persons
+          persons={this.state.persons}
+          click={this.deletePersonHandler}
+          changed={this.nameChangedHandler}
+          isAuth={this.state.authen}
+        ></Persons>
       );
-      btnClass = main.Red;
-    }
-
-    const assignedClasses = [];
-    if (this.state.persons.length <= 2) {
-      assignedClasses.push(main.red);
-    }
-
-    if (this.state.persons.length <= 1) {
-      assignedClasses.push(main.bold);
     }
 
     return (
       <div className={main.App}>
-        <p className={assignedClasses}>Helloooooo</p>
-        <button className={btnClass} onClick={this.togglePersonHandler}>
-          Toggle Persons
+        <button
+          onClick={() => {
+            this.setState({ showCockPit: !this.state.showCockPit });
+          }}
+        >
+          Remove Cockpit
         </button>
-        {person}
+        <AuthContext.Provider
+          value={{
+            auth: this.state.authen,
+            login: this.loginHandler
+          }}
+        >
+          {this.state.showCockPit ? (
+            <Cockpit
+              title={this.props.appTitle}
+              showPersons={this.state.showPersons}
+              personsLength={this.state.persons.length}
+              togglePerson={this.togglePersonHandler}
+            />
+          ) : null}
+          {person}
+        </AuthContext.Provider>
       </div>
     );
   }
